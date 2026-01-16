@@ -36,7 +36,7 @@ Resources:
         - Key: Name
           Value: aws-study-subnet1c
 
-  # 
+  # InternetGateway
   InternetGateway:
     Type: AWS::EC2::InternetGateway
     Properties:
@@ -222,3 +222,75 @@ Resources:
       DefaultActions:
         - Type: forward
           TargetGroupArn: !Ref ELBTagetGroup
+    
+  # Alarm
+  EC2CPUUtilizationAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: aws-study-ec2-cpu-alarm
+      AlarmDescription: "aws-study EC2のCPU使用率が10％以上になりました"
+
+      Namespace: AWS/EC2
+      MetricName: CPUUtilization
+      Dimensions:
+        - Name: InstanceId
+          Value: !Ref AWSStudyEC2
+
+      Statistic: Average
+      Period: 300
+      EvaluationPeriods: 1
+      Threshold: 10
+      ComparisonOperator: GreaterThanThreshold
+      AlarmActions: 
+        - !Ref AlarmSNSTopic
+      Unit: Percent
+
+  AlarmSNSTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      TopicName: aws-study-alarm-topic
+
+  # wafの設定
+  webACL:
+    Type: AWS::WAFv2::WebACL
+    Properties:
+      Name: aws-study-web-acl
+      Scope: REGIONAL
+      DefaultAction:
+        Allow: {}
+      VisibilityConfig:
+        SampledRequestsEnabled: true
+        CloudWatchMetricsEnabled: true
+        MetricName: aws-study-web-acl
+      Rules: 
+        - Name: AWSManagedCommonRuleSet
+          Priority: 1
+          OverrideAction:
+            None: {}
+          Statement:
+            ManagedRuleGroupStatement:
+              VendorName: AWS
+              Name: AWSManagedRulesCommonRuleSet
+          VisibilityConfig:
+            SampledRequestsEnabled: true
+            CloudWatchMetricsEnabled: true
+            MetricName: aws-study-common-rule-set
+
+  webACLAssociation:
+    Type: AWS::WAFv2::WebACLAssociation
+    Properties:
+      ResourceArn: !Ref ELB
+      WebACLArn: !GetAtt webACL.Arn
+
+  WafLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: aws-study-waf-log-group
+      RetentionInDays: 14
+  
+  WafLoggingConfiguration:
+    Type: AWS::WAFv2::LoggingConfiguration
+    Properties:
+      ResourceArn: !GetAtt webACL.Arn
+      LogDestinationConfigs:
+        - !GetAtt WafLogGroup.Arn
