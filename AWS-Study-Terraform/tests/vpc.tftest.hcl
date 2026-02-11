@@ -8,7 +8,7 @@ run "vpc_plan_test" {
     }
 
     assert {
-      condition = aws_vpc.aws-study-vpc.cidr_block == "10.0.0.0/16"
+      condition = aws_vpc.aws-study-vpc.cidr_block == "10.0.0.0/15"
       error_message = "期待値と異なります"
     }
 }

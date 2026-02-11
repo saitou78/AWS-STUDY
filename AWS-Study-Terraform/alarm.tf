@@ -1,6 +1,6 @@
 resource "aws_cloudwatch_metric_alarm" "ec2_cpu_alarm" {
-  alarm_name          = "ec2-cpu-alarm"
-  alarm_description    = "aws-study EC2のCPU使用率が10％以上になりました"
+  alarm_name        = "ec2-cpu-alarm"
+  alarm_description = "aws-study EC2のCPU使用率が10％以上になりました"
 
   namespace   = "AWS/EC2"
   metric_name = "CPUUtilization"
