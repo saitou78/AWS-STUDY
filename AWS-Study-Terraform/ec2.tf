@@ -20,7 +20,7 @@ resource "aws_instance" "aws-study-ec2" {
   vpc_security_group_ids      = [aws_security_group.sg-ec2.id]
   associate_public_ip_address = true
   key_name                    = "saito"
-  monitoring = false
+  monitoring                  = false
 
   tags = {
     Name = "aws-study-ec2"

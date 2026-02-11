@@ -1,5 +1,5 @@
 resource "aws_wafv2_web_acl" "aws-study-web-acl" {
-  name        = "aws-study-web-acl"
+  name  = "aws-study-web-acl"
   scope = "REGIONAL"
 
   default_action {
