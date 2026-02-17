@@ -1,0 +1,45 @@
+name: Terraform CI
+
+on:
+  pull_request:
+    paths:
+      - 'AWS-Study-Terraform/**.tf'
+      - 'AWS-Study-Terraform/test/**.tftest.hcl'
+  push:
+    branches: [main]
+    paths:
+      - 'AWS-Study-Terraform/**.tf'
+      - 'AWS-Study-Terraform/test/**.tftest.hcl'
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+
+    env:
+      aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      aws-region: ap-northeast-1
+
+    defaults:
+      run:
+        working-directory: AWS-Study-Terraform
+        
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Terraform Format Check
+        run: terraform fmt -check -recursive
+
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Terraform Validate
+        run: terraform validate
+
+      - name: Terraform Plan
+        run: terraform plan -no-color
+
