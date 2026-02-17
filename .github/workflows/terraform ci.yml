@@ -3,13 +3,13 @@ name: Terraform CI
 on:
   pull_request:
     paths:
-      - 'AWS-Study-Terraform/**.tf'
-      - 'AWS-Study-Terraform/test/**.tftest.hcl'
+      - 'AWS-Study-Terraform/**/*.tf'
+      - 'AWS-Study-Terraform/test/**/*.tftest.hcl'
   push:
     branches: [main]
     paths:
-      - 'AWS-Study-Terraform/**.tf'
-      - 'AWS-Study-Terraform/test/**.tftest.hcl'
+      - 'AWS-Study-Terraform/**/*.tf'
+      - 'AWS-Study-Terraform/test/**/*.tftest.hcl'
 
 jobs:
   terraform:
