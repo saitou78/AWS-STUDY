@@ -34,7 +34,8 @@ jobs:
         run: terraform apply -auto-approve
 
       - name: Wait for EC2
-        run: sleep 30
+        run: |
+          aws ec2 wait instance-status-ok --instance-ids $INSTANCE_ID
 
       - name: Get EC2 IP
         id: tf-output
