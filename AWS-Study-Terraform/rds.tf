@@ -18,6 +18,7 @@ resource "aws_db_instance" "aws_study_rds" {
 
   allow_major_version_upgrade = false
   auto_minor_version_upgrade  = true
+  skip_final_snapshot = true
 
   db_subnet_group_name   = aws_db_subnet_group.aws_study_db_subnet_group.name
   vpc_security_group_ids = [aws_security_group.sg-rds.id]
