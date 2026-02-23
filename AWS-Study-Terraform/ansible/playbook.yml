@@ -1,0 +1,17 @@
+- hosts: web
+  become: true
+
+  tasks:
+    - name: Install Java 17 (Corretto)
+      dnf:
+        name: java-17-amazon-corretto
+        state: present
+
+    - name: Check java version
+      command: java -version
+      register: java_result
+      changed_when: false
+
+    - name: Show java version
+      debug:
+        var: java_result.stderr
