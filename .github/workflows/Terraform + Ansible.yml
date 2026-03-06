@@ -56,5 +56,9 @@ jobs:
           echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/key.pem
           chmod 400 ~/.ssh/key.pem
 
+      - name: Disable SSH host key checking
+        run: |
+          echo -e "Host *\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
+
       - name: Run Ansible
         run: ansible-playbook -i ansible/inventory.ini ansible/playbook.yml
