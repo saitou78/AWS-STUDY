@@ -13,6 +13,7 @@ data "aws_ami" "al2023" {
   }
 }
 
+# EC2インスタンスの作成
 resource "aws_instance" "aws-study-ec2" {
   ami                         = data.aws_ami.al2023.id
   instance_type               = "t2.micro"
